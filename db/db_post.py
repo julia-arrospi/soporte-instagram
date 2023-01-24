@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 from routers.schemas import PostBase
 from sqlalchemy.orm.session import Session
 from db.models import DbPost
+from db.models import DbComment
 import datetime
 
 
@@ -35,4 +36,12 @@ def delete(db: Session, id: int, user_id: int):
   return 'ok'
 
 def posts_stats(db:Session, id: int, user_id:int):
+  posts = db.query(DbPost).all()
+  comments = db.query(DbComment).all()
+  
+  stats = {
+    'sum_posts': posts.count(),
+    'comments': comments.count(),
+  }
+  
   return 1000;
