@@ -36,12 +36,12 @@ def delete(db: Session, id: int, user_id: int):
   return 'ok'
 
 def posts_stats(db:Session, id: int, user_id:int):
-  posts = db.query(DbPost).all()
-  comments = db.query(DbComment).all()
+  posts = db.query(DbPost).filter(DbPost.id == id).first()
+  comments = db.query(DbComment).filter(DbComment.post_id == id).all()
   
   stats = {
-    'sum_posts': posts.count(),
-    'comments': comments.count(),
+    #'sum_posts': len(posts),
+    'sum_comments': len(comments),
   }
-  
-  return 1000;
+
+  return stats;

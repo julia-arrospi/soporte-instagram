@@ -47,6 +47,6 @@ def upload_image(image: UploadFile = File(...), current_user: UserAuth = Depends
 def delete(id: int, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
   return db_post.delete(db, id, current_user.id)
 
-@router.get('stats/{id}')
+@router.get('/stats/{id}')
 def stats(id: int, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
   return db_post.posts_stats(db, id, current_user.id);
