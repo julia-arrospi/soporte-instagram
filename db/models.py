@@ -1,8 +1,14 @@
 from sqlalchemy.sql.schema import ForeignKey
 from .database import Base
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Table
 from sqlalchemy.orm import relationship
 
+user_followers = Table(
+  'user_followers',
+  Base.metadata,
+  Column('user_id', Integer, ForeignKey('user.id')),
+  Column('follower_id', Integer, ForeignKey('user.id'))
+)
 class DbUser(Base):
   __tablename__ = 'user'
   id = Column(Integer, primary_key=True, index=True)
@@ -10,6 +16,8 @@ class DbUser(Base):
   email = Column(String)
   password = Column(String)
   items = relationship('DbPost', back_populates='user')
+  followers=relationship('DbUser', secondary=user_followers, back_populates='following')
+  following=relationship('DbUser', secondary=user_followers, back_populates='followers')
 
 class DbPost(Base):
   __tablename__ = 'post'

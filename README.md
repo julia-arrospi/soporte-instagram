@@ -20,3 +20,10 @@ o
 # Para correr la app:
 
 `uvicorn main:app --reload`
+
+# Para visualizar la BBDD
+
+Recomendamos utilizar DBeaver para visualizar las tablas y sus datos.
+[https://dbeaver.io/download/](https://dbeaver.io/download/)
+
+Simplemente agregar una nueva conexión de SQLite, apuntando al archivo 'ig_api.db'. A medida que se agreguen registros, refrescar la BBDD.
