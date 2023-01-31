@@ -16,8 +16,13 @@ class DbUser(Base):
   email = Column(String)
   password = Column(String)
   items = relationship('DbPost', back_populates='user')
-  followers=relationship('DbUser', secondary=user_followers, back_populates='following')
-  following=relationship('DbUser', secondary=user_followers, back_populates='followers')
+  followers=relationship(
+    'DbUser', 
+    secondary=user_followers,
+    primaryjoin=id == user_followers.c.user_id,
+    secondaryjoin=id == user_followers.c.follower_id,
+    )
+  #following=relationship('DbUser', secondary=user_followers, back_populates='followers')
 
 class DbPost(Base):
   __tablename__ = 'post'

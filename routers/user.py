@@ -18,3 +18,7 @@ def create_user(request: UserBase, db: Session = Depends(get_db)):
 @router.get('/stats/{id}')
 def stats(id: int, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
   return db_user.user_stats(db, id, current_user.id);
+
+@router.post('/follow/{user_id}')
+def follow(user_id: int, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
+  return db_user.follow(db, user_id, current_user.id);

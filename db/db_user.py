@@ -22,6 +22,18 @@ def get_user_by_username(db: Session, username: str):
       detail=f'User with username {username} not found')
   return user
 
+def follow(db: Session, user_id:int, follower_id:int):
+  user = db.query(DbUser).filter(DbUser.id == user_id).first()
+  follower = db.query(DbUser).filter(DbUser.id == follower_id).first()
+  if not user:
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+      detail=f'User with username {username} not found')
+    
+  user.followers.append(follower)
+  db.commit()
+  db.refresh(user)
+  return user
+
 def user_stats(db:Session, id: int, user_id:int):
   posts = db.query(DbPost).filter(DbPost.user_id == id).all()
   #comments = db.query(DbComment).filter(DbComment.post_id == id).all()
