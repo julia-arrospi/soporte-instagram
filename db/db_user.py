@@ -45,3 +45,8 @@ def user_stats(db:Session, id: int, user_id:int):
   }
 
   return stats;
+
+def user_profile(db:Session, id: int):
+  user = db.query(DbUser).filter(DbUser.id == id).first()
+
+  return user;

@@ -19,6 +19,10 @@ def create_user(request: UserBase, db: Session = Depends(get_db)):
 def stats(id: int, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
   return db_user.user_stats(db, id, current_user.id);
 
-@router.post('/follow/{user_id}')
+@router.get('/profile/{id}', response_model=UserDisplay)
+def profile(id: int, db: Session = Depends(get_db)):
+  return db_user.user_profile(db, id);
+
+@router.post('/follow/{user_id}', response_model=UserDisplay)
 def follow(user_id: int, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
   return db_user.follow(db, user_id, current_user.id);

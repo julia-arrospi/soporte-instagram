@@ -2,7 +2,11 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import List
 
-
+class UserList(BaseModel):
+  username: str
+  email: str
+  class Config():
+    orm_mode = True
 class UserBase(BaseModel):
   username: str
   email: str
@@ -11,6 +15,8 @@ class UserBase(BaseModel):
 class UserDisplay(BaseModel):
   username: str
   email: str
+  followers: List[UserList]
+  following: List[UserList]
   class Config():
     orm_mode = True
 
@@ -54,3 +60,12 @@ class CommentBase(BaseModel):
   username: str
   text: str
   post_id: int
+  
+class UserDisplay(BaseModel):
+  username: str
+  email: str
+  followers: List[UserList]
+  following: List[UserList]
+  items: List[PostDisplay]
+  class Config():
+    orm_mode = True

@@ -22,7 +22,12 @@ class DbUser(Base):
     primaryjoin=id == user_followers.c.user_id,
     secondaryjoin=id == user_followers.c.follower_id,
     )
-  #following=relationship('DbUser', secondary=user_followers, back_populates='followers')
+  following=relationship(
+    'DbUser', 
+    secondary=user_followers,
+    primaryjoin=id == user_followers.c.follower_id,
+    secondaryjoin=id == user_followers.c.user_id,
+    )
 
 class DbPost(Base):
   __tablename__ = 'post'
