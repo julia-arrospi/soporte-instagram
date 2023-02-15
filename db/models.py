@@ -2,12 +2,14 @@ from sqlalchemy.sql.schema import ForeignKey
 from .database import Base
 from sqlalchemy import Column, Integer, String, DateTime, Table
 from sqlalchemy.orm import relationship
+import datetime
 
 user_followers = Table(
   'user_followers',
   Base.metadata,
   Column('user_id', Integer, ForeignKey('user.id')),
-  Column('follower_id', Integer, ForeignKey('user.id'))
+  Column('follower_id', Integer, ForeignKey('user.id')),
+  Column('timestamp', DateTime, default=datetime.datetime.utcnow),
 )
 class DbUser(Base):
   __tablename__ = 'user'

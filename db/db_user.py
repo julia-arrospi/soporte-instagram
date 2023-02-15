@@ -1,8 +1,9 @@
 from fastapi import HTTPException, status
-from db.models import DbUser, DbPost
+from db.models import DbUser, DbPost, DbComment, user_followers
 from routers.schemas import UserBase
 from sqlalchemy.orm.session import Session
 from db.hashing import Hash
+import datetime
 
 def create_user(db: Session, request: UserBase):
   new_user = DbUser(
@@ -36,12 +37,35 @@ def follow(db: Session, user_id:int, follower_id:int):
 
 def user_stats(db:Session, id: int, user_id:int):
   posts = db.query(DbPost).filter(DbPost.user_id == id).all()
-  #comments = db.query(DbComment).filter(DbComment.post_id == id).all()
-  #TODO: join con posts para el total de comentarios
+  comments = db.query(DbComment).join(DbPost).filter(DbPost.user_id == id).all()
+  
+  today = datetime.datetime.now()
+  last_week = today - datetime.timedelta(days = 7)
+  last_last_week = today - datetime.timedelta(days = 14)
+  #first = today.replace(day=1)
+  #last_month = first - datetime.timedelta(days=1)
+  comments_last_week = db.query(DbComment).join(DbPost).filter(DbPost.user_id == id).filter(DbComment.timestamp <= last_week).filter(DbComment.timestamp >= last_last_week).all()
+  comments_this_week = db.query(DbComment).join(DbPost).filter(DbPost.user_id == id).filter(DbComment.timestamp <= today).filter(DbComment.timestamp >= last_week).all()
+
+  comments_percentage_this_week = len(comments_this_week)*100/len(comments_last_week)
+  
+  followers_last_week = db.query(user_followers.c.timestamp).filter(user_followers.c.user_id==id).filter(user_followers.c.timestamp <= last_week).filter(user_followers.c.timestamp>=last_last_week).all()
+  followers_this_week = db.query(user_followers.c.timestamp).filter(user_followers.c.user_id==id).filter(user_followers.c.timestamp <= today).filter(user_followers.c.timestamp>=last_week).all()
+  
+  followers_percentage_this_week = len(followers_this_week)*100/len(followers_last_week)
+  
+  # cant seguidores + promedio por semana (agregar timestamp)
+  # cant comentarios + promedio por semana
   
   stats = {
     'sum_posts': len(posts),
-    #'sum_comments': len(comments),
+    'sum_comments': len(comments),
+    'comments_last_week': len(comments_last_week),
+    'comments_this_week': len(comments_this_week),
+    'avg_comments_this_week': '+' if len(comments_this_week) > len(comments_last_week) else '-' + str(comments_percentage_this_week) + '%',
+    'followers_last_week': len(followers_last_week),
+    'followers_this_week': len(followers_this_week),
+    'avg_followers_this_week': '+' if len(followers_this_week) > len(followers_last_week) else '-' + str(followers_percentage_this_week) + '%'
   }
 
   return stats;
