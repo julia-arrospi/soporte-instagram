@@ -18,6 +18,7 @@ class DbUser(Base):
   email = Column(String)
   password = Column(String)
   items = relationship('DbPost', back_populates='user')
+  #relaciones muchos a muchos sobre si mismo
   followers=relationship(
     'DbUser', 
     secondary=user_followers,
