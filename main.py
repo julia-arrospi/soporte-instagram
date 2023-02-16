@@ -18,7 +18,7 @@ app.include_router(authentication.router)
 
 @app.get("/")
 def root():
-  return "Hello world!"
+  return "Bienvenido a Instagram"
 
 
 origins = [

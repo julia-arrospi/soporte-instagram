@@ -32,12 +32,14 @@ def posts(db: Session = Depends(get_db)):
 
 @router.post('/image')
 def upload_image(image: UploadFile = File(...), current_user: UserAuth = Depends(get_current_user)):
+  #Guardar imagen
   letters = string.ascii_letters
   rand_str = ''.join(random.choice(letters) for i in range(6))
   new = f'_{rand_str}.'
   filename = new.join(image.filename.rsplit('.', 1))
   path = f'images/{filename}'
 
+  #guardar
   with open(path, "w+b") as buffer:
     shutil.copyfileobj(image.file, buffer)
   
