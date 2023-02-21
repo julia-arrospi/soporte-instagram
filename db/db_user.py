@@ -24,11 +24,20 @@ def get_user_by_username(db: Session, username: str):
   return user
 
 def follow(db: Session, user_id:int, follower_id:int):
+  if follower_id == user_id:
+    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+          detail='You cannot follow yourself')
+
   user = db.query(DbUser).filter(DbUser.id == user_id).first()
   follower = db.query(DbUser).filter(DbUser.id == follower_id).first()
+
   if not user:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-      detail=f'User with username {username} not found')
+      detail=f'User with id {user_id} not found')
+
+  if not follower:
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+      detail=f'User with id {follower_id} not found')
     
   user.followers.append(follower)
   db.commit()
@@ -36,6 +45,9 @@ def follow(db: Session, user_id:int, follower_id:int):
   return user
 
 def user_stats(db:Session, id: int, user_id:int):
+  if id != user_id:
+    raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+      detail='Only logged user can see stats.')
   posts = db.query(DbPost).filter(DbPost.user_id == id).all()
   comments = db.query(DbComment).join(DbPost).filter(DbPost.user_id == id).all()
   
@@ -79,5 +91,9 @@ def user_stats(db:Session, id: int, user_id:int):
 
 def user_profile(db:Session, id: int):
   user = db.query(DbUser).filter(DbUser.id == id).first()
+
+  if not user:
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+      detail=f'User with id {id} not found')
 
   return user;
