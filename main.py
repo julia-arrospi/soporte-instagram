@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from sqlalchemy.sql.functions import user
 from db import models
 from db.database import engine
-from routers import user, post, comment
+from routers import user, post, comment, email
 from fastapi.staticfiles import StaticFiles
 from auth import authentication
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +14,7 @@ app = FastAPI()
 app.include_router(user.router)
 app.include_router(post.router)
 app.include_router(comment.router)
+app.include_router(email.router)
 app.include_router(authentication.router)
 
 @app.get("/")
