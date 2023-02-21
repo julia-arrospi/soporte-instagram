@@ -50,13 +50,19 @@ def user_stats(db:Session, id: int, user_id:int):
   comments_last_week = db.query(DbComment).join(DbPost).filter(DbPost.user_id == id).filter(DbComment.timestamp <= last_week).filter(DbComment.timestamp >= last_last_week).all()
   comments_this_week = db.query(DbComment).join(DbPost).filter(DbPost.user_id == id).filter(DbComment.timestamp <= today).filter(DbComment.timestamp >= last_week).all()
 
-  comments_percentage_this_week = len(comments_this_week)*100/len(comments_last_week)
+  if(len(comments_last_week) == 0):
+    comments_percentage_this_week = 0
+  else:
+    comments_percentage_this_week = len(comments_this_week)*100/len(comments_last_week)
   
   # cant seguidores + promedio por semana (agregar timestamp)
   followers_last_week = db.query(user_followers.c.timestamp).filter(user_followers.c.user_id==id).filter(user_followers.c.timestamp <= last_week).filter(user_followers.c.timestamp>=last_last_week).all()
   followers_this_week = db.query(user_followers.c.timestamp).filter(user_followers.c.user_id==id).filter(user_followers.c.timestamp <= today).filter(user_followers.c.timestamp>=last_week).all()
   
-  followers_percentage_this_week = len(followers_this_week)*100/len(followers_last_week)
+  if(len(followers_last_week) == 0):
+    followers_percentage_this_week = 0
+  else:
+    followers_percentage_this_week = len(followers_this_week)*100/len(followers_last_week)
   
   stats = {
     'sum_posts': len(posts),
