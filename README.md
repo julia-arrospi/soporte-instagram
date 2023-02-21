@@ -21,9 +21,17 @@ o
 
 `uvicorn main:app --reload`
 
-# Para visualizar la BBDD
+## Archivos necesarios para correr la app
+
+Se necesitan dos archivos para que la app funcione, que por seguridad no deben ser versionados así que están incluidos en la carpeta de la entrega del proyecto.
+
+1. en `/mail` debe colocarse el archivo `config.py`
+
+2. en el directorio raíz debe colocarse el archivo `ig_api.db`
+
+## Para visualizar la BBDD
 
 Recomendamos utilizar DBeaver para visualizar las tablas y sus datos.
 [https://dbeaver.io/download/](https://dbeaver.io/download/)
 
-Simplemente agregar una nueva conexión de SQLite, apuntando al archivo 'ig_api.db'. A medida que se agreguen registros, refrescar la BBDD.
+Simplemente agregar una nueva conexión de SQLite, apuntando al archivo `ig_api.db`. A medida que se agreguen registros, refrescar la BBDD.
