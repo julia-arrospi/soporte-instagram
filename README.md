@@ -19,7 +19,11 @@ o
 
 # Para correr la app:
 
-`uvicorn main:app --reload`
+1. Instalar requerimientos. Ver apartado de arriba.
+
+2. Ver apartado 'Archivos necesarios para correr la app'
+
+3. `uvicorn main:app --reload`
 
 ## Archivos necesarios para correr la app
 
