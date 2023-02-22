@@ -38,6 +38,7 @@ description = """
 
   * Crear un comentario para un post.
   * Ver todos los comentarios de un post.
+  * Eliminar un comentario de un post.
 
   ## Emails
   

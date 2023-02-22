@@ -4,6 +4,7 @@ http://127.0.0.1:8000/docs
 Si no permite usar un endpoint, loguear con un usuario arriba de todo, donde dice Authorize.
 
 ## Para correr el entorno virtual
+*Aclaración: No se utiliza para correr el sistema.*
 *win*
 `.\env\bin\activate`
 
@@ -23,7 +24,7 @@ o
 
 2. Ver apartado 'Archivos necesarios para correr la app'
 
-3. `uvicorn main:app --reload`
+3. Correr en consola: `uvicorn main:app --reload`
 
 ## Archivos necesarios para correr la app
 
