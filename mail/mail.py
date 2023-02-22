@@ -1,4 +1,6 @@
 import string
+from smtplib import SMTPException, SMTPDataError
+
 import mail.config
 import email.message
 from email.utils import formataddr
@@ -38,8 +40,13 @@ def send_mail(user_post_email: string, user_post: string, user_comment: string, 
     msg['To'] = user_post_email
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(email_content)
-    s = mail.config.server
-    s.starttls()
-    s.login(login, password)
-    s.sendmail(msg['From'], [msg['To']], msg.as_string())
+    try:
+        s = mail.config.server
+        s .starttls()
+        s.login(login, password)
+        s.sendmail(msg['From'], [msg['To']], msg.as_string())
+        s.quit()
+    except SMTPException:
+        print('\n********\nLímite diario de envío de emails excedido. '
+              'Se creó el comentario pero no se envió notificación por email.\n********\n{')
 
