@@ -63,6 +63,8 @@ def user_stats(db:Session, id: int, user_id:int):
   comments_this_week = db.query(DbComment).join(DbPost).filter(DbPost.user_id == id).filter(DbComment.timestamp <= today).filter(DbComment.timestamp >= last_week).all()
 
   if(len(comments_last_week) == 0):
+    comments_percentage_this_week = len(comments_this_week)*100
+  elif(len(comments_last_week) == len(comments_this_week)):
     comments_percentage_this_week = 0
   else:
     comments_percentage_this_week = len(comments_this_week)*100/len(comments_last_week)
@@ -72,19 +74,31 @@ def user_stats(db:Session, id: int, user_id:int):
   followers_this_week = db.query(user_followers.c.timestamp).filter(user_followers.c.user_id==id).filter(user_followers.c.timestamp <= today).filter(user_followers.c.timestamp>=last_week).all()
   
   if(len(followers_last_week) == 0):
+    followers_percentage_this_week = len(followers_this_week)*100
+  elif(len(followers_last_week) == len(followers_this_week)):
     followers_percentage_this_week = 0
   else:
     followers_percentage_this_week = len(followers_this_week)*100/len(followers_last_week)
+
+  if(len(comments_this_week) > len(comments_last_week)):
+    avg_comments = '+'
+  else:
+    avg_comments = '-'
+
+  if(len(followers_this_week) > len(followers_last_week)):
+    avg_followers = '+'
+  else:
+    avg_followers = '-'
   
   stats = {
     'sum_posts': len(posts),
     'sum_comments': len(comments),
     'comments_last_week': len(comments_last_week),
     'comments_this_week': len(comments_this_week),
-    'avg_comments_this_week': '+' if len(comments_this_week) > len(comments_last_week) else '-' + str(comments_percentage_this_week) + '%',
+    'avg_comments_this_week': avg_comments + str(comments_percentage_this_week) + '%',
     'followers_last_week': len(followers_last_week),
     'followers_this_week': len(followers_this_week),
-    'avg_followers_this_week': '+' if len(followers_this_week) > len(followers_last_week) else '-' + str(followers_percentage_this_week) + '%'
+    'avg_followers_this_week': avg_followers + str(followers_percentage_this_week) + '%'
   }
 
   return stats;
