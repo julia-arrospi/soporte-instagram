@@ -23,3 +23,8 @@ def create(request: CommentBase, db: Session = Depends(get_db), current_user: Us
     creator_post = db.query(DbUser).filter(DbUser.id == post.user_id).first()
     mail.send_mail(creator_post.email, creator_post.username, request.username, request.text)
     return db_comment.create(db, request)
+
+
+@router.delete('/delete/{id}')
+def delete(id: int, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
+  return db_comment.delete(db, id, current_user.id)
