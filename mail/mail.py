@@ -47,6 +47,6 @@ def send_mail(user_post_email: string, user_post: string, user_comment: string, 
         s.sendmail(msg['From'], [msg['To']], msg.as_string())
         s.quit()
     except SMTPException:
-        print('\n********\nLímite diario de envío de emails excedido. '
-              'Se creó el comentario pero no se envió notificación por email.\n********\n{')
+        print('\n********\nDaily limit for email sending exceeded.'
+              'Comment was created but email notification could not be sent.\n********\n')
 
