@@ -27,7 +27,7 @@ def delete(db: Session, comment_id: int, user_id: int):
   user = db.query(DbUser).filter(DbUser.id == user_id).first()
   if not comment:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-          detail=f'comment with id {id} not found')
+          detail=f'comment with id {comment_id} not found')
   if comment.username != user.username or not user:
     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
           detail='Only comment creator can delete comment')
